@@ -5,6 +5,8 @@ from adafruit_motor.servo import Servo
 from adafruit_pca9685 import PCA9685
 from board import SCL, SDA
 
+INITIAL_ANGLE = [90, 50, 10, 0]
+
 
 class ServoController:
     i2c = busio.I2C(SCL, SDA)
@@ -29,7 +31,8 @@ class ServoController:
             raise ValueError("Angle must be between 0 and 180")
         elif servo_number < 0 or servo_number > len(self.__servos):
             raise ValueError(
-                "Servo number must be between 0 and {}".format(len(self.__servos))
+                "Servo number must be between 0 and {}".format(
+                    len(self.__servos))
             )
 
         self.__servos[servo_number].angle = angle
@@ -38,9 +41,9 @@ class ServoController:
     def get_angle(self, servo_number: int) -> int:
         return self.__angles[servo_number]
 
-    def initialize(self, angle=0):
+    def initialize(self):
         for i in range(len(self.__servos)):
-            self.set_angle(i, angle)
+            self.set_angle(i, INITIAL_ANGLE[i])
 
     @classmethod
     def __getMG996R(cls, ServoId: int) -> Servo:
